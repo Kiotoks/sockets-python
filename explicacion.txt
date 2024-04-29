@@ -1,8 +1,4 @@
-# Ejercicio de sockets con python
-
-Testeo de sockets en python haciendo diferentes versiones de un simple programa de mensajeria
-
-# Explicacion del codigo 
+#Explicacion del codigo 
 
 ## Inicio de ejecucion:
 
