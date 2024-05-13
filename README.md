@@ -58,27 +58,27 @@ En el bucle principal el servidor escanea el socket hasta que detecta un intento
 
 ```python
     def atender_cliente(cliente):
-    nombre = cliente.recv(1024).decode("utf-8")
-    print(f"[CLIENTE {nombre} conectado]")
-    respuesta = f"Tu nombre es {nombre}"
-    cliente.sendall(respuesta.encode("utf-8"))
-    enviarMensaje(f"[{nombre} se ha conectado]", cliente)
-    while True:
-        try:
-            # Recibe el mensaje del cliente
-            mensaje = cliente.recv(1024).decode("utf-8")
-            print(f"[CLIENTE {nombre}] {mensaje}")
-            enviarMensaje(f"[{nombre}] {mensaje}", cliente)
-        except:
-            # Si hay un error, cierra la conexión con el cliente
-            cliente.close()
-            for i in range(0, len(clientes)):
-                if cliente == clientes[i]:
-                    clientes.pop(i)
+        nombre = cliente.recv(1024).decode("utf-8")
+        print(f"[CLIENTE {nombre} conectado]")
+        respuesta = f"Tu nombre es {nombre}"
+        cliente.sendall(respuesta.encode("utf-8"))
+        enviarMensaje(f"[{nombre} se ha conectado]", cliente)
+        while True:
+            try:
+                # Recibe el mensaje del cliente
+                mensaje = cliente.recv(1024).decode("utf-8")
+                print(f"[CLIENTE {nombre}] {mensaje}")
+                enviarMensaje(f"[{nombre}] {mensaje}", cliente)
+            except:
+                # Si hay un error, cierra la conexión con el cliente
+                cliente.close()
+                for i in range(0, len(clientes)):
+                    if cliente == clientes[i]:
+                        clientes.pop(i)
 
-            enviarMensaje(f"[{nombre} se ha desconectado]", cliente)
-            print(f"[CLIENTE {nombre} desconectado]")
-            breaks
+                enviarMensaje(f"[{nombre} se ha desconectado]", cliente)
+                print(f"[CLIENTE {nombre} desconectado]")
+                break
 ```
 
 Cada vez que un cliente se conecta se crea una nueva instancia de este hilo.
@@ -90,11 +90,51 @@ El bucle del cliente consiste en la ecucha de cualquier mensaje enviado por este
 Cuando el cliente cierra la conexion con el servidor se detecta una exepcion, se comunica a todos los clientes la desconexion y cierra la conexion con el cliente.
 
 ## Bitacora
-En esta version del codigo, un solo cliente puede enviar mensajes infinitos hacia el servidor sin necesitar respuesta
+En esta version del codigo, un solo cliente puede enviar mensajes infinitos hacia el servidor sin necesitar respuesta de este. El servidor se remite a mostrar los mensajes por pantalla.
 
 ### Bucle principal:
 El servidor escucha por un mensaje del cliente para luego imprimirlos en pantalla.
 
+```python
+    def atender_cliente(cliente):
+        while True:
+            try:
+                # Recibe el mensaje del cliente
+                mensaje = cliente.recv(1024).decode("utf-8")
+                print(f"[CLIENTE {nombre}] {mensaje}")
+            except:
+                # Si hay un error, cierra la conexión con el cliente
+                cliente.close()
+                for i in range(0, len(clientes)):
+                    if cliente == clientes[i]:
+                        clientes.pop(i)
+
+                enviarMensaje(f"[{nombre} se ha desconectado]", cliente)
+                print(f"[CLIENTE {nombre} desconectado]")
+                break
+```
+
 ## Mensaje por turnos
 En esta version del codigo, el servidor y el cliente se turnan para enviarse mensajes el uno al otro 
 El servidor escucha por un mensaje del cliente. Recien cuando se recibe se pide un mensaje para enviar al cliente
+
+```python
+    def atender_cliente(cliente):
+        while True:
+            try:
+                # Recibe el mensaje del cliente
+                mensaje = cliente.recv(1024).decode("utf-8")
+                print(f"[CLIENTE {nombre}] {mensaje}")
+                mensaje = str(input("ingrese mensaje para el cliente"))
+                enviarMensaje(f"[{nombre}] {mensaje}", cliente)
+            except:
+                # Si hay un error, cierra la conexión con el cliente
+                cliente.close()
+                for i in range(0, len(clientes)):
+                    if cliente == clientes[i]:
+                        clientes.pop(i)
+
+                enviarMensaje(f"[{nombre} se ha desconectado]", cliente)
+                print(f"[CLIENTE {nombre} desconectado]")
+                break
+```
