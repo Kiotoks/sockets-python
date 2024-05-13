@@ -2,7 +2,51 @@
 
 Testeo de sockets en python haciendo diferentes versiones de un simple programa de mensajeria
 
-# Explicacion del codigo 
+# Explicacion del codigo del cliente
+
+El codigo del cliente inicia intentando conectarse al servidor. Una vez establedida la conexion, crea el hilo para recibir mensajes del servidor. De esta forma se pueden recibir mensajes del servidor en cualquier momento.  Luego, entra al bucle principal. En este le pide que ingrese un mensaje para luego mandarselo a servidor.  
+
+Este codigo de cliente puede ser reutilizado con cualquier servidor
+
+```python
+
+    import socket
+    import threading
+
+    HOST = "localhost"  # Dirección del servidor
+    PORT = 8000  # Puerto del servidor
+
+    cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  # Crea un socket TCP
+    cliente.connect((HOST, PORT))  # Se conecta al servidor
+
+    def recibir_mensajes():
+        while True:
+            try:
+                # Recibe mensajes del servidor
+                mensaje = cliente.recv(1024).decode("utf-8")
+                print(mensaje)
+            except:
+                # Si hay un error, cierra la conexión con el servidor
+                cliente.close()
+                print("Conexión con el servidor cerrada.")
+                break
+
+    # Inicia un hilo para recibir mensajes en segundo plano
+    hilo_recepcion = threading.Thread(target=recibir_mensajes)
+    hilo_recepcion.start()
+
+    mensaje = input("Ingrese su nombre: ")
+    cliente.sendall(mensaje.encode("utf-8"))
+
+    while True:
+        # Pide al usuario que ingrese un mensaje
+        mensaje = input("")
+        # Envía el mensaje al servidor
+        cliente.sendall(mensaje.encode("utf-8"))
+
+```
+
+# Explicacion del codigo del servidor 
 
 ## Inicio de ejecucion:
 
