@@ -162,6 +162,10 @@ El servidor escucha por un mensaje del cliente para luego imprimirlos en pantall
 En esta version del codigo, el servidor y el cliente se turnan para enviarse mensajes el uno al otro 
 El servidor escucha por un mensaje del cliente. Recien cuando se recibe se pide un mensaje para enviar al cliente
 
+pito pene pitulin
+
+a mati le dan bomba
+
 ```python
     def atender_cliente(cliente):
         while True:
