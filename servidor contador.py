@@ -1,6 +1,5 @@
 import socket
 import threading
-import time
 
 HOST = "localhost"  # Dirección del servidor
 PORT = 8000  # Puerto del servidor
@@ -12,30 +11,22 @@ server.bind((HOST, PORT))  # Asocia el socket a la dirección y puerto
 server.listen(5)  # Pone el socket en modo escucha
 print("[SERVIDOR] Servidor iniciado")
 
-
-def enviarMensaje(mensaje, cliente):
-    try:
-        for otro_cliente in clientes:
-            if otro_cliente != cliente:
-                otro_cliente.sendall(mensaje.encode("utf-8"))
-    except:
-        print("error")
-
 def atender_cliente(cliente):
+    contador = 0
     while True:
         try:
             # Recibe el mensaje del cliente
             mensaje = cliente.recv(1024).decode("utf-8")
-            print(f"[CLIENTE {nombre}] {mensaje}")
+            contador += 1
+            cliente.sendall(f"cantidad de mensajes enviados: {contador}".encode("utf-8"))
         except:
             # Si hay un error, cierra la conexión con el cliente
             cliente.close()
+
             for i in range(0, len(clientes)):
                 if cliente == clientes[i]:
                     clientes.pop(i)
-
-            enviarMensaje(f"[{nombre} se ha desconectado]", cliente)
-            print(f"[CLIENTE {nombre} desconectado]")
+                    
             break
 
 while True:

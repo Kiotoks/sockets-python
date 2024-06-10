@@ -22,11 +22,17 @@ def enviarMensaje(mensaje, cliente):
         print("error")
 
 def atender_cliente(cliente):
+    nombre = cliente.recv(1024).decode("utf-8")
+    print(f"[CLIENTE {nombre} conectado]")
+    respuesta = f"Tu nombre es {nombre}"
+    cliente.sendall(respuesta.encode("utf-8"))
+    enviarMensaje(f"[{nombre} se ha conectado]", cliente)
     while True:
         try:
             # Recibe el mensaje del cliente
             mensaje = cliente.recv(1024).decode("utf-8")
             print(f"[CLIENTE {nombre}] {mensaje}")
+            enviarMensaje(f"[{nombre}] {mensaje}", cliente)
         except:
             # Si hay un error, cierra la conexión con el cliente
             cliente.close()
